@@ -1,19 +1,28 @@
+import enum
+
 from aoc2021.utils.parsing import get_input
 
+
+class Direction(enum.Enum):
+    forward = "forward"
+    up = "up"
+    down = "down"
+
+
 def main():
-    input = get_input("day02")
-    commands = [str.split(i) for i in input]
+    tokens = (str.split(i) for i in get_input("day02"))
+    commands = [(Direction(command), int(x)) for [command, x] in tokens]
     position = 0
     depth = 0
     aim = 0
-    for i in range(len(commands)):
-        if commands[i][0] == "forward":
-            position += int(commands[i][1])
-            depth += (aim * int(commands[i][1]))
-        if commands[i][0] == "down":
-            aim += int(commands[i][1])
-        if commands[i][0] == "up":
-            aim -= int(commands[i][1])
+    for command, x in commands:
+        if command is Direction.forward:
+            position += x
+            depth += (aim * x)
+        if command == Direction.down:
+            aim += x
+        if command == Direction.up:
+            aim -= x
     print(f"position is {position}")
     print(f"depth is {depth}")
     print(f"multiplied position and depth is {position * depth}")
